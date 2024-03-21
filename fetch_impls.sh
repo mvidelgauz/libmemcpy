@@ -20,7 +20,7 @@ cd glibc/build
 ../configure --prefix="${workdir}"
 make -j$(nproc)
 
-for impl in ../sysdeps/x86_64/multiarch/mem{cpy,move}-*.S; do
+for impl in ../sysdeps/x86_64/multiarch/memmove-*.S; do
   impl_basename="$(basename "${impl}")"
   case "${impl_basename}" in
     # Only ever included by other copy implementations with differing values of
@@ -82,5 +82,6 @@ for impl in ../sysdeps/x86_64/multiarch/mem{cpy,move}-*.S; do
     > "${workdir}/impls/${impl_basename%.S}.s"
 done
 
-mkdir -p "${dir}/impls"
+rm -rf "${dir}/impls" 
+mkdir "${dir}/impls"
 "${dir}/simplify_asm.py" "${workdir}/impls/"* -o "${dir}/impls"
